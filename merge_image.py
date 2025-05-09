@@ -12,6 +12,10 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
+def get_working_directory():
+    """获取用户当前的工作目录"""
+    return os.getcwd()
+
 def natural_sort_key(s):
     """按照人类自然排序方式处理字符串，例如 'img2.jpg' 排在 'img10.jpg' 前面"""
     return [int(text) if text.isdigit() else text.lower()
@@ -20,14 +24,13 @@ def natural_sort_key(s):
 def merge_images():
     try:
         # 获取图片源路径
-        source_dir = input("请输入图片所在文件夹路径(直接回车将使用当前目录): ").strip()
+        source_dir = input("请输入图片所在文件夹路径(直接回车将使用当前工作目录): ").strip()
         
-        # 如果为空，则使用当前目录
+        # 如果为空，则使用当前工作目录
         if not source_dir:
-            if getattr(sys, 'frozen', False):
-                source_dir = os.path.dirname(sys.executable)
-            else:
-                source_dir = os.path.dirname(os.path.abspath(__file__))
+            # 使用当前工作目录而不是程序所在目录
+            source_dir = get_working_directory()
+            print(f"使用当前工作目录: {source_dir}")
         
         # 验证源路径是否有效
         if not os.path.isdir(source_dir):
